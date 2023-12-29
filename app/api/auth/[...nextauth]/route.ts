@@ -1,18 +1,17 @@
-import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/user";
-import NextAuth from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+import { SessionStrategy, AuthOptions } from 'next-auth';
+import { connectMongoDB } from '@/lib/mongodb';
+import User from '@/models/user';
+import NextAuth from 'next-auth/next';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcryptjs';
+import { Credentials } from '../../../../types/credentials';
 
-
-export const authOptions = {
+const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {},
-
-      async authorize(credentials) {
-       
+      async authorize(credentials:any ) {
         const { email, password } = credentials;
         try {
           await connectMongoDB();
@@ -30,17 +29,18 @@ export const authOptions = {
 
           return user;
         } catch (error) {
-          console.log("Error: ", error);
+          console.log('Error: ', error);
+          return null;
         }
       },
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt' as SessionStrategy,
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || '',
   pages: {
-    signIn: "/",
+    signIn: '/',
   },
 };
 
