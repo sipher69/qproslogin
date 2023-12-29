@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import UserInfo from "./UserInfo";
+import LoginForm from "./LoginForm";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -25,7 +27,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     }
   }, [router]);
 
-  return isAuthenticated ? <>{children}</> : <Link href="/">Login</Link>;
+  return isAuthenticated ? <UserInfo /> : <LoginForm />;
 };
 
 export default PrivateRoute;
